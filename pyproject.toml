@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django_lit_urls"
-version = "0.1.0"
+version = "0.1.1"
 description = "Django URLS delivered as string literal functions in Javascript"
 authors = ["Josh Brooks <josh@catalpa.io>"]
 license = "GPLv3"
