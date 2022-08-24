@@ -4,10 +4,11 @@ version = "0.1.0"
 description = "Django URLS delivered as string literal functions in Javascript"
 authors = ["Josh Brooks <josh@catalpa.io>"]
 license = "GPLv3"
+exclude = ["**/.vscode"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pydantic = "^1.9.2"
+pydantic = "^1.9.0"
 Django = ">3.1"
 
 [tool.poetry.dev-dependencies]
