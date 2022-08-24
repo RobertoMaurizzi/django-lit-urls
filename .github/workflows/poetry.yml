@@ -46,7 +46,7 @@ jobs:
         - name: Run mypy
           if: always()
           run: |
-            poetry run mypy
+            poetry run mypy django_lit_urls
         
         - name: Run pytest
           if: always()

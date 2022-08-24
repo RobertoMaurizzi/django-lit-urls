@@ -20,3 +20,24 @@ mypy = "^0.971"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = 'black'
+line_length = 119
+
+[tool.black]
+line-length = 119
+target-version = ['py38']
+
+[tool.pylint.format]
+max-line-length = "119"
+
+[tool.mypy]
+python_version = "3.8"
+
+[[tool.mypy.overrides]]
+module = [
+    "django.urls",
+    "django.urls.resolvers",
+]
+ignore_missing_imports = true

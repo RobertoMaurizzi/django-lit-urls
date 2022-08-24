@@ -6,12 +6,12 @@ from urllib.parse import urljoin
 
 from pydantic import BaseModel
 
-from .utils import _parse_resolver
+from django_lit_urls.utils import _parse_resolver
 
 logger = logging.getLogger(__name__)
 
 
-def camel_case(s):
+def camel_case(s: str) -> str:
     s = sub(r"(_|-)+", " ", s).title().replace(" ", "")
     return "".join([s[0].lower(), s[1:]])
 

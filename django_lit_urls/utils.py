@@ -30,7 +30,7 @@ def _parse_resolver(
     exclude_namespaces: Set[str] = {
         "admin",
     },
-    js_vars: Optional[Params] = (),
+    js_vars: Params = (),
     url_lookup: str = "",
 ) -> Iterable[Dict[str, Any]]:
 
