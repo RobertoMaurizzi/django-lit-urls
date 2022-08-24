@@ -24,6 +24,9 @@ class UrlModel(BaseModel):
     url_lookup: str
     is_alternative: bool = False  # Flag whether this is an "extra" pattern name,
 
+    class Config:
+        frozen = True
+
     def matches(self, name: str, params: Optional[Tuple[str]] = None) -> bool:
         """
         Check whether the name and optional parameter names passed
@@ -77,25 +80,25 @@ class UrlModel(BaseModel):
 class UrlModels(BaseModel):
     urls: Sequence[UrlModel]
 
-    def filtered_by_name(self, match=Iterable[Union[str, Tuple[str, Tuple[str]]]]):
+    def filtered_by_name(self, matches: Iterable[Union[str, Tuple[str, Tuple[str]]]] = []):
         """
         Returns a new UrlModels instance
         where the URL names and optionally parameters match the
+        given 'match' strings / tuples
         """
         return self.__class__(
-            urls=(
-                um
-                for um in self.urls
-                if (isinstance(match, str) and um.matches(match))
-                or (not isinstance(match, str) and um.matches(*match))
+            urls=set(
+                [
+                    um
+                    for um in self.urls
+                    for match in matches
+                    if (isinstance(match, str) and um.matches(match))
+                    or (not isinstance(match, str) and um.matches(*match))
+                ]
             )
         )
 
-    @classmethod
-    def all_urls(cls):
-        return cls(urls=[UrlModel(**_r) for _r in _parse_resolver()])
-
 
 @lru_cache()
-def all_urls():
-    return UrlModels.all_urls()
+def all_urls() -> UrlModels:
+    return UrlModels(urls=[UrlModel(**_r) for _r in _parse_resolver()])

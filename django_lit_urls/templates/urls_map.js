@@ -1,0 +1,2 @@
+    const {{js_param_name|default:"urls"}} = new Map(); {% for mu in model_urls.urls %}
+    {{js_param_name|default:"urls"}}.set("{{mu.js_func_name}}", ({{mu.js_vars|join:", "}}) => new URL({{mu.js_literal|safe}}, location.origin)) {% endfor %}
