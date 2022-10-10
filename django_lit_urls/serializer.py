@@ -1,5 +1,6 @@
 import logging
 from functools import lru_cache, reduce
+from io import StringIO
 from re import sub
 from typing import Iterable, Optional, Sequence, Tuple, Union
 from urllib.parse import urljoin
@@ -76,9 +77,22 @@ class UrlModel(BaseModel):
     def as_arrow_func_property(self):
         return f"{self.js_func_name}: ({', '.join(self.js_vars)}) => {self.js_literal}"
 
+    @property
+    def as_map_setter(self):
+        return f"\"{self.js_func_name}\", ({', '.join(self.js_vars)}) => new URL({self.js_literal}, location.origin))"
+
 
 class UrlModels(BaseModel):
     urls: Sequence[UrlModel]
+    param_name: str = "urls"
+
+    def __post_init__(self):
+        """
+        If URLS was not defined initially, make it all the
+        available URLS
+        """
+        if len(self.urls) == 0:
+            self.urls = [UrlModel(**_r) for _r in _parse_resolver()]
 
     def filtered_by_name(self, matches: Iterable[Union[str, Tuple[str, Tuple[str]]]] = []):
         """
@@ -97,6 +111,25 @@ class UrlModels(BaseModel):
                 ]
             )
         )
+
+    @property
+    def as_map(self):
+        """
+        Returns Javascript to generate a mapping
+        representing how to generate URLs
+        """
+        indent = 4
+        map_ = StringIO()
+        map_.write(f"const {self.param_name} = new Map(\n")
+        map_.writelines(
+            (
+                f"""{' '*indent}["{u.js_func_name}", ({', '.join(u.js_vars)}) => new URL({u.js_literal}, location.origin)]"""
+                for u in self.urls
+            )
+        )
+        map_.write("\n)")
+        map_.seek(0)
+        return map_.read()
 
 
 @lru_cache()

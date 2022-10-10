@@ -1,6 +1,6 @@
 import unittest
 
-from django_lit_urls.serializer import UrlModel
+from django_lit_urls.serializer import UrlModel, UrlModels
 from django_lit_urls.utils import _url_to_js_func
 
 
@@ -74,4 +74,36 @@ class UrlModelTestCase(unittest.TestCase):
         self.assertEqual(
             test_case.as_function,
             "function villageCourtDetail(pk){ return `/en/dims/village-court/${pk}/` }",
+        )
+
+        self.assertEqual(
+            test_case.as_map_setter,
+            '"villageCourtDetail", (pk) => new URL(`/en/dims/village-court/${pk}/`, location.origin))',
+        )
+
+
+class UrlModelsTestCase(unittest.TestCase):
+    """
+    Tests the functions representing a group of UrlModels
+    """
+
+    def setUp(self) -> None:
+        self.test_case = UrlModels(
+            urls=[
+                UrlModel(
+                    pattern_name="village-court-detail",
+                    namespace="",
+                    url_parts=("/", "en/", "dims/", r"village-court/${pk}/"),
+                    js_vars=("pk",),
+                    url_lookup="location_profile.views.VillageCourtViewSet",
+                    is_alternative=False,
+                )
+            ]
+        )
+        return super().setUp()
+
+    def test_map(self):
+        self.assertEqual(
+            self.test_case.as_map,
+            'const urls = new Map(\n    ["villageCourtDetail", (pk) => new URL(`/en/dims/village-court/${pk}/`, location.origin)]\n)',
         )
