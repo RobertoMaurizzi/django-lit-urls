@@ -3,6 +3,7 @@ from functools import lru_cache, reduce
 from io import StringIO
 from re import sub
 from typing import Iterable, Optional, Sequence, Tuple, Union
+from typing_extensions import Self
 from urllib.parse import urljoin
 
 from pydantic import BaseModel
@@ -94,21 +95,23 @@ class UrlModels(BaseModel):
         if len(self.urls) == 0:
             self.urls = [UrlModel(**_r) for _r in _parse_resolver()]
 
-    def filtered_by_name(self, matches: Iterable[Union[str, Tuple[str, Tuple[str]]]] = []):
+    def filtered_by_name(self, matches: Iterable[Union[str, Tuple[str, Tuple[str]]]] = []) -> Self:
         """
         Returns a new UrlModels instance
         where the URL names and optionally parameters match the
         given 'match' strings / tuples
         """
         return self.__class__(
-            urls=set(
-                [
-                    um
-                    for um in self.urls
-                    for match in matches
-                    if (isinstance(match, str) and um.matches(match))
-                    or (not isinstance(match, str) and um.matches(*match))
-                ]
+            urls=tuple(
+                set(
+                    [
+                        um
+                        for um in self.urls
+                        for match in matches
+                        if (isinstance(match, str) and um.matches(match))
+                        or (not isinstance(match, str) and um.matches(*match))
+                    ]
+                )
             )
         )
 
