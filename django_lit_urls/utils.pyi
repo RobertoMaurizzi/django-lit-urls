@@ -1,7 +1,8 @@
 from typing import Optional, Tuple, Union
 
-from _typeshed import Incomplete as Incomplete
 from django.urls import URLPattern, URLResolver
+
+from _typeshed import Incomplete as Incomplete
 
 logger: Incomplete
 MaybeResolver = Optional[Union[URLPattern, URLResolver]]

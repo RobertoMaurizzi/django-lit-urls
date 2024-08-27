@@ -1,7 +1,8 @@
 from typing import Optional, Sequence, Tuple
 
-from _typeshed import Incomplete
 from pydantic import BaseModel
+
+from _typeshed import Incomplete
 
 logger: Incomplete
 
