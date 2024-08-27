@@ -3,10 +3,10 @@ from functools import lru_cache, reduce
 from io import StringIO
 from re import sub
 from typing import Iterable, Optional, Sequence, Tuple, Union
-from typing_extensions import Self
 from urllib.parse import urljoin
 
 from pydantic import BaseModel
+from typing_extensions import Self
 
 from django_lit_urls.utils import _parse_resolver
 
