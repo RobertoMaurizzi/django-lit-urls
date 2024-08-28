@@ -8,7 +8,7 @@ exclude = ["**/.vscode"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-pydantic = "^1.9.0"
+pydantic = ">=1.9, <3"
 Django = ">3.1"
 
 [tool.poetry.dev-dependencies]
@@ -37,8 +37,5 @@ max-line-length = "119"
 python_version = "3.8"
 
 [[tool.mypy.overrides]]
-module = [
-    "django.urls",
-    "django.urls.resolvers",
-]
+module = ["django.urls", "django.urls.resolvers"]
 ignore_missing_imports = true
